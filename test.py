@@ -10,25 +10,32 @@ def function(json):
         page = requests.get(url)
         tree = html.fromstring(page.content)
         title = tree.cssselect("h1:first-of-type")[0].text_content().split()
+        print(title) #testing
 
         #summary of wikipedia page
         summary = tree.get_element_by_id("mw-content-text")
+        #Clearing infoboxes:
+        if summary.find_class("infobox"):
+            summary.find_class("infobox")[0].drop_tree()
+        #getting info
         p = summary.cssselect("p:first-of-type")[0]
         body = p.text_content().replace('"', "").split()
 
         #clearing the body of topic text
         temptitle = tree.cssselect("b:first-of-type")[0].text_content().split()
         tempbody = body[:]
-        for tidbit in tempbody[0:len(title) + 2]:
+        for tidbit in tempbody[0:len(temptitle) + 2]:
             if temptitle:
                 body.remove(tidbit)
                 if tidbit in temptitle:
                     temptitle.remove(tidbit)
 
+        #Allowing alexa to say to instead of -
         body = [item if item != "-" else "to" for item in body]
 
-        if len(body) > 20:
-            body = body[:20].append("Oops. I ran out of memory")
+        if len(body) > 35:
+            body = body[:35]
+            body.append("Oops! I ran out of memory!")
 
         return title, body
 
