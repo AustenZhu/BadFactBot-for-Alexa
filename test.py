@@ -10,14 +10,13 @@ def function(json):
         page = requests.get(url)
         tree = html.fromstring(page.content)
         title = tree.cssselect("h1:first-of-type")[0].text_content().split()
-        print(title) #testing
 
         #summary of wikipedia page
         summary = tree.get_element_by_id("mw-content-text")
         #Clearing infoboxes:
         if summary.find_class("infobox"):
             summary.find_class("infobox")[0].drop_tree()
-        #getting info
+
         p = summary.cssselect("p:first-of-type")[0]
         body = p.text_content().replace('"', "").split()
 
@@ -43,8 +42,6 @@ def function(json):
         """Generates a bad fact with no original topic"""
         topic = wikiSpider()[0]
         body = wikiSpider()[1]
-        while not body:
-            body = wikiSpider()[1]
         fact = ""
         ok = True #Handling unicode characters
 

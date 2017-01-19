@@ -55,6 +55,7 @@ def handler(filename):
                         speechOut = json.loads(stdout)
                     except ValueError:
                         print("Something wrong, trying again")
+                        return handle(event, context)
                 return bad_factor_response(speechOut, session)
             else:
                 raise ValueError("Invalid intent")
