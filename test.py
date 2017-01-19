@@ -17,7 +17,7 @@ def function(json):
         body = p.text_content().replace('"', "").split()
 
         #clearing the body of topic text
-        temptitle = title[:]
+        temptitle = tree.cssselect("b:first-of-type")[0].text_content().split()
         tempbody = body[:]
         for tidbit in tempbody[0:len(title) + 2]:
             if temptitle:
@@ -25,12 +25,19 @@ def function(json):
                 if tidbit in temptitle:
                     temptitle.remove(tidbit)
 
+        body = [item if item != "-" else "to" for item in body]
+
+        if len(body) > 20:
+            body = body[:20].append("Oops. I ran out of memory")
+
         return title, body
 
     def bad_fact_generator():
         """Generates a bad fact with no original topic"""
         topic = wikiSpider()[0]
         body = wikiSpider()[1]
+        while not body:
+            body = wikiSpider()[1]
         fact = ""
         ok = True #Handling unicode characters
 
