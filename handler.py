@@ -39,6 +39,8 @@ def handler(filename):
                 return get_welcome_response()
             elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
                 return handle_session_end_request()
+            elif intent_name == "BadQueryIntent":
+                return bad_query_response(session)
             elif intent_name == "FactIntent":
                 env = os.environ.copy()
                 env.update(LD_LIBRARY_PATH=LIBS)
@@ -56,7 +58,7 @@ def handler(filename):
                     except ValueError:
                         print("Something wrong, trying again")
                         return handle(event, context)
-                return bad_factor_response(speechOut, session)
+                return bad_factor_response(speechOut + ". Ask me for another fact?", session)
             else:
                 raise ValueError("Invalid intent")
     return handle
@@ -78,8 +80,8 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         },
         'card': {
             'type': 'Simple',
-            'title': "SessionSpeechlet - " + title,
-            'content': "SessionSpeechlet - " + output
+            'title': title,
+            'content': output
         },
         'reprompt': {
             'outputSpeech': {
@@ -100,8 +102,13 @@ def bad_factor_response(speechOut, session):
     session_attributes = {}
     reprompt_text = "Ask me another fact?"
     should_end_session = False
-    return build_response(session_attributes, build_speechlet_response("FactIntent", speechOut, reprompt_text, should_end_session))
-
+    return build_response(session_attributes, build_speechlet_response("Bad fact", speechOut, reprompt_text, should_end_session))
+def bad_query_response(session):
+    session_attributes = {}
+    reprompt_text = ""
+    should_end_session = False
+    speechOut = "I didn't quite understand what you said. Sorry! Want me to tell you a fact beep?"
+    return build_response(session_attributes, build_speechlet_response("Bad Query Response", speechOut, reprompt_text, should_end_session))
 #-------------Skill Behaviors----------------
 def get_welcome_response():
     session_attributes = {}
