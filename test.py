@@ -2,6 +2,7 @@ import handler, cssselect, requests, lxml
 from lxml import html
 
 def function(json):
+    #Function does not currently need to use json
     def wikiSpider():
         """Scrapes the wiki to generate a bad fact"""
 

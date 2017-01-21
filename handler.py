@@ -24,13 +24,19 @@ def handler(filename):
     def handle(event, context):
         if event['session']['new']:
             on_session_started({'requestId': event['request']['requestId']}, event['session'])
+        session = event['session']
+
+        #Security
+        if session['application']['applicationId'] != "":
+            raise ValueError("Invalid Application ID")
+
         #Handling Intents Here
         if event['request']['type'] == "LaunchRequest":
             return on_launch(event['request'], event['session'])
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])
         elif event['request']['type'] == "IntentRequest":
-            intent_request, session = event['request'], event['session']
+            intent_request = event['request']
             intent = intent_request['intent']
             intent_name = intent_request['intent']['name']
             print("on_intent requestId=" + intent_request['requestId'] +
@@ -39,8 +45,6 @@ def handler(filename):
                 return get_welcome_response()
             elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
                 return handle_session_end_request()
-            elif intent_name == "BadQueryIntent":
-                return bad_query_response(session)
             elif intent_name == "FactIntent":
                 env = os.environ.copy()
                 env.update(LD_LIBRARY_PATH=LIBS)
@@ -103,12 +107,7 @@ def bad_factor_response(speechOut, session):
     reprompt_text = "Ask me another fact?"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response("Bad fact", speechOut, reprompt_text, should_end_session))
-def bad_query_response(session):
-    session_attributes = {}
-    reprompt_text = ""
-    should_end_session = False
-    speechOut = "I didn't quite understand what you said. Sorry! Want me to tell you a fact beep?"
-    return build_response(session_attributes, build_speechlet_response("Bad Query Response", speechOut, reprompt_text, should_end_session))
+
 #-------------Skill Behaviors----------------
 def get_welcome_response():
     session_attributes = {}
