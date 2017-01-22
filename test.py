@@ -35,7 +35,7 @@ def function(json):
 
         if len(body) > 35:
             body = body[:35]
-            body.append("Oops! I ran out of memory!")
+            body.append(". Oops! I ran out of memory!")
 
         return title, body
 

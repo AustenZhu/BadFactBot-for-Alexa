@@ -27,7 +27,7 @@ def handler(filename):
         session = event['session']
 
         #Security
-        if session['application']['applicationId'] != "":
+        if session['application']['applicationId'] != "amzn1.ask.skill.420209cc-29fe-4e0b-ad26-e1a435f73e3d":
             raise ValueError("Invalid Application ID")
 
         #Handling Intents Here
@@ -113,7 +113,7 @@ def get_welcome_response():
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Hello, Human. I am the most knowledgable bot in the universe." \
-                    "I can tell you a fact about anything. " \
+                    " I can tell you a fact about anything. " \
                     "Beep. Boop. Beep."
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
