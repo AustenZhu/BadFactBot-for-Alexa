@@ -4,7 +4,8 @@ import os, sys, subprocess, json
 
 
 LIBS = os.path.join(os.getcwd(), 'local', 'lib')
-#-------PYTHON PACKAGE WRAPPING------------
+#-------PYTHON PACKAGE WRAPPING------------ (NOTE: AWS LAMBDA HAS AN ERROR WHEN IMPORTING PYTHON MODULES 
+#                                           NORMALLY IN HANDLER FUNCTIONS, SO THERE IS A WORK AROUND BELOW)
 def on_intent(intent_request, session):
     """Called when user specifies intent"""
     print("on_intent requestId=" + intent_request['requestId'] +
@@ -42,6 +43,7 @@ def handler(filename):
             elif intent_name == "BadQueryIntent":
                 return bad_query_response(session)
             elif intent_name == "FactIntent":
+                #PYTHON PACKAGE IMPORTING WORKAROUND
                 env = os.environ.copy()
                 env.update(LD_LIBRARY_PATH=LIBS)
                 proc = subprocess.Popen(
@@ -57,7 +59,7 @@ def handler(filename):
                         speechOut = json.loads(stdout)
                     except ValueError:
                         print("Something wrong, trying again")
-                        return handle(event, context)
+                        return handle(event, context) #Restart the process (could be optimized by not repeating entire process)
                 return bad_factor_response(speechOut + ". Ask me for another fact?", session)
             else:
                 raise ValueError("Invalid intent")
