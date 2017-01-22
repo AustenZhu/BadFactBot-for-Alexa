@@ -28,7 +28,7 @@ def handler(filename):
         session = event['session']
 
         #Security
-        if session['application']['applicationId'] != "amzn1.ask.skill.420209cc-29fe-4e0b-ad26-e1a435f73e3d":
+        if session['application']['applicationId'] != "":
             raise ValueError("Invalid Application ID")
 
         #Handling Intents Here
@@ -79,6 +79,7 @@ lambda_handler = handler('test.py')
 #--------Helpers----------------
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
+    #Building json response
     return {
         'outputSpeech': {
             'type': 'PlainText',
@@ -99,6 +100,7 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
     }
 
 def build_response(session_attributes, speechlet_response):
+    #Building json response
     return {
         'version': 1.0,
         'sessionAttributes': session_attributes,
