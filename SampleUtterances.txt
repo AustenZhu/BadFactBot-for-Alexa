@@ -1,0 +1,24 @@
+FactIntent give me a fact
+FactIntent give me another fact
+FactIntent give me a bad fact
+FactIntent give me another bad fact
+FactIntent tell me a fact
+FactIntent tell me another fact
+FactIntent tell me a bad fact
+FactIntent tell me another bad fact
+FactIntent give me some information
+FactIntent to give me a fact
+FactIntent to give me a bad fact
+FactIntent to give me another bad fact
+FactIntent to tell me a fact
+FactIntent to tell me a bad fact
+FactIntent to tell me another bad fact
+FactIntent for a fact
+FactIntent for a bad fact
+FactIntent for another bad fact
+FactIntent a fact
+FactIntent a bad fact
+FactIntent another fact
+AMAZON.StopIntent close bad fact bot
+AMAZON.StopIntent shut down bad fact bot
+AMAZON.StopIntent shut down 

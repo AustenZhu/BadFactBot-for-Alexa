@@ -11,6 +11,7 @@ def function(json):
         page = requests.get(url)
         tree = html.fromstring(page.content)
         title = tree.cssselect("h1:first-of-type")[0].text_content().split()
+        print(title) #Testing
 
         #summary of wikipedia page
         summary = tree.get_element_by_id("mw-content-text")
@@ -22,7 +23,10 @@ def function(json):
         body = p.text_content().replace('"', "").split()
 
         #clearing the body of topic text
-        temptitle = tree.cssselect("b:first-of-type")[0].text_content().split()
+        try:
+            temptitle = tree.cssselect("b:first-of-type")[0].text_content().split()
+        except:
+            temptitle = title
         tempbody = body[:]
         for tidbit in tempbody[0:len(temptitle) + 2]:
             if temptitle:
@@ -39,24 +43,33 @@ def function(json):
 
         return title, body
 
-    def bad_fact_generator():
-        """Generates a bad fact with no original topic"""
-        topic = wikiSpider()[0]
+    #If bad unicode, only body needs to be regenerated
+    def regen_body_text():
         body = wikiSpider()[1]
-        fact = ""
-        ok = True #Handling unicode characters
-
-        for tidbit in topic + body:
-            fact += tidbit + " "
-
+        body_text = "";
+        ok = True #Handling Unicode characters
+        for tidbit in body:
+            body_text += tidbit + " "
         try:
-            fact.decode("ascii")
+            body_text.decode("ascii")
         except:
             print("Bad utf-8/ASCII formatting, regenerating fact")
             ok = False
-
         if not ok:
-            return bad_fact_generator()
+            return regen_body_text()
+        return body_text
+
+    def bad_fact_generator():
+        """Generates a bad fact with no original topic"""
+        topic = wikiSpider()[0]
+        body = regen_body_text()
+        fact = ""
+        #print(body) testing
+
+        for tidbit in topic:
+            fact += tidbit + " "
+        fact += body
+        
         return fact
     return bad_fact_generator()
 
