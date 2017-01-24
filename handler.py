@@ -6,8 +6,10 @@ import os, sys, subprocess, json
 LIBS = os.path.join(os.getcwd(), 'local', 'lib')
 #-------PYTHON PACKAGE WRAPPING------------ (NOTE: AWS LAMBDA HAS AN ERROR WHEN IMPORTING PYTHON MODULES
 #                                           NORMALLY IN HANDLER FUNCTIONS, SO THERE IS A WORK AROUND BELOW)
+"""
+Unused Alternate method
+
 def on_intent(intent_request, session):
-    """Called when user specifies intent"""
     print("on_intent requestId=" + intent_request['requestId'] +
           ", sessionId=" + session['sessionId'])
     intent = intent_request['intent']
@@ -20,6 +22,7 @@ def on_intent(intent_request, session):
         return handle_session_end_request()
     else:
         raise ValueError("Invalid intent")
+"""
 
 def handler(filename):
     def handle(event, context):
